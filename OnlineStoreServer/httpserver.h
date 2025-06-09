@@ -6,7 +6,7 @@
 #include <QHttpServer>
 #include <QDir>
 #include <QFile>
-#include <QUuid> // Для генерации имен файлов
+#include <QUuid>
 #include <QMimeDatabase>
 #include <QMap>
 

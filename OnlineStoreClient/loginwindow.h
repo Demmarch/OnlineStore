@@ -1,7 +1,7 @@
 #ifndef LOGINWINDOW_H
 #define LOGINWINDOW_H
 
-#include <QMainWindow> // Как в вашем .ui
+#include <QMainWindow>
 #include "networkmanager.h"
 
 QT_BEGIN_NAMESPACE
@@ -20,11 +20,11 @@ signals:
     void loginSuccessful(int userId, const QString& userRole);
 
 private slots:
-    void on_pushButtonAuth_clicked(); // Автоматическое соединение по имени из .ui
+    void on_pushButtonAuth_clicked();
     void handleLoginResponse(bool success, const QJsonObject& userData, const QString& errorString);
 
 private:
-    Ui::LoginWindow *ui; // Указатель на класс формы, сгенерированный из .ui
+    Ui::LoginWindow *ui;
     NetworkManager m_networkManager;
 };
 

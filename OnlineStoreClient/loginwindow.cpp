@@ -9,47 +9,38 @@ LoginWindow::LoginWindow(QWidget *parent) :
 {
     ui->setupUi(this); // Настраиваем UI для этого окна
 
-    // Соединяем сигнал от NetworkManager со слотом этого окна
     connect(&m_networkManager, &NetworkManager::loginCompleted, this, &LoginWindow::handleLoginResponse);
-
-    // Поля lineLogin и linePasswor доступны через ui->lineLogin и ui->linePasswor
-    // Кнопка pushButtonAuth доступна через ui->pushButtonAuth
-    // Их сигналы (например, clicked для кнопки) могут быть соединены здесь или автоматически по имени
-    // (если слот называется on_<objectName>_<signalName>())
 }
 
 LoginWindow::~LoginWindow()
 {
-    delete ui; // Освобождаем память от UI
+    delete ui;
 }
 
-void LoginWindow::on_pushButtonAuth_clicked() // Имя слота соответствует objectName кнопки
+void LoginWindow::on_pushButtonAuth_clicked()
 {
-    QString username = ui->lineLogin->text(); // Используем objectName из .ui
-    QString password = ui->linePasswor->text(); // Используем objectName из .ui (linePasswor)
+    QString username = ui->lineLogin->text();
+    QString password = ui->linePasswor->text();
 
     if (username.isEmpty() || password.isEmpty()) {
         QMessageBox::warning(this, "Ошибка входа", "Пожалуйста, введите логин и пароль.");
         return;
     }
 
-    ui->pushButtonAuth->setEnabled(false); // Блокируем кнопку на время запроса
+    ui->pushButtonAuth->setEnabled(false);
     m_networkManager.login(username, password);
 }
 
 void LoginWindow::handleLoginResponse(bool success, const QJsonObject& userData, const QString& errorString)
 {
-    ui->pushButtonAuth->setEnabled(true); // Разблокируем кнопку
-
+    ui->pushButtonAuth->setEnabled(true);
     if (success) {
         int userId = userData.value("user_id").toInt(-1);
         QString userRole = userData.value("user_role").toString();
 
         if (userId != -1 && !userRole.isEmpty()) {
             qDebug() << "LoginWindow: Login successful. User ID:" << userId << "Role:" << userRole;
-            // QMessageBox::information(this, "Успех", "Вход выполнен успешно!"); // Можно убрать, если сразу переход
             emit loginSuccessful(userId, userRole);
-            // this->close(); // main.cpp закроет это окно
         } else {
             QMessageBox::warning(this, "Ошибка входа", "Неверный формат данных от сервера.");
             qDebug() << "LoginWindow: Invalid data from server after login:" << userData;

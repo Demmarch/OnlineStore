@@ -1,6 +1,6 @@
 #include "loginwindow.h"
 #include "customerwindow.h"
-#include "adminwindow.h" // Подключаем заголовок админ-панели
+#include "adminwindow.h"
 
 #include <QApplication>
 #include <QMessageBox>
@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
     QObject::connect(&loginWindow, &LoginWindow::loginSuccessful,
                      [&](int userId, const QString& userRole) {
                          if (userRole == "user") {
-                             customerWindow->setCurrentUser(userId, userRole);
+                             customerWindow->setCurrentUser(userId);
                              customerWindow->show();
                              loginWindow.close();
                          } else if (userRole == "admin") {

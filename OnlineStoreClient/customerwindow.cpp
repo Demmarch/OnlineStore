@@ -5,14 +5,14 @@
 #include <QDebug>
 #include <QListWidgetItem>
 #include <QLabel>
-#include <QVBoxLayout> // Уже включен через ui, но для ясности
+#include <QVBoxLayout>
 #include <QScrollArea>
 #include "cartwindow.h"
 
 
 CustomerWindow::CustomerWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::CustumerWindow), // Используем имя класса из .ui файла
+    ui(new Ui::CustumerWindow),
     m_currentUserId(-1)
 {
     ui->setupUi(this);
@@ -40,11 +40,10 @@ CustomerWindow::~CustomerWindow()
     delete ui;
 }
 
-void CustomerWindow::setCurrentUser(int userId, const QString& userRole)
+void CustomerWindow::setCurrentUser(int userId)
 {
     m_currentUserId = userId;
-    m_currentUserRole = userRole;
-    qDebug() << "CustomerWindow: Current user ID:" << m_currentUserId << "Role:" << m_currentUserRole;
+    qDebug() << "CustomerWindow: Current user ID:" << m_currentUserId;
 
     if (m_currentUserId != -1) {
         qDebug() << "CustomerWindow: Fetching categories for user" << m_currentUserId;
@@ -161,7 +160,6 @@ void CustomerWindow::handleCartActionCompleted(bool success, const QString& mess
 void CustomerWindow::on_actionViewCart_triggered()
 {
     qDebug() << "CustomerWindow: 'View Cart' action triggered. User ID:" << m_currentUserId;
-    // Создаем и показываем модальное окно корзины
     CartWindow *cartWin = new CartWindow(m_currentUserId, &m_networkManager, this);
     // Соединяем сигнал от корзины, чтобы обновить каталог после покупки
     connect(cartWin, &CartWindow::purchaseCompleted, this, &CustomerWindow::refreshProducts);
@@ -215,11 +213,9 @@ void CustomerWindow::tryRenderFilteredProducts()
         QJsonObject productObj = value.toObject();
         int productId = productObj["product_id"].toInt();
 
-        // --- ГЛАВНАЯ ЛОГИКА ФИЛЬТРАЦИИ ---
         if (m_cartProductIds.contains(productId)) {
             continue; // Если товар есть в корзине, пропускаем его
         }
-        // ------------------------------------
 
         visibleProductsCount++;
         ProductCard *card = new ProductCard(

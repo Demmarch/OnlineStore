@@ -47,7 +47,6 @@ QJsonArray DatabaseHandler::getCategories()
         return categoriesArray;
     }
 
-    // Можно использовать представление vw_CategoriesWithProductCount
     QSqlQuery query(m_db);
     query.prepare("SELECT category_id, category_name, number_of_products FROM vw_CategoriesWithProductCount");
 

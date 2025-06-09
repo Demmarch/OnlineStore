@@ -6,10 +6,9 @@
 #include "networkmanager.h"
 #include "productcard.h"
 
-// Forward-declare QListWidgetItem if not fully included
 QT_BEGIN_NAMESPACE
 class QListWidgetItem;
-namespace Ui { class CustumerWindow; } // Используем имя класса из .ui файла
+namespace Ui { class CustumerWindow; }
 QT_END_NAMESPACE
 
 class CustomerWindow : public QMainWindow
@@ -20,7 +19,7 @@ public:
     explicit CustomerWindow(QWidget *parent = nullptr);
     ~CustomerWindow();
 
-    void setCurrentUser(int userId, const QString& userRole);
+    void setCurrentUser(int userId);
 
 private slots:
     // Слоты для NetworkManager
